@@ -6,6 +6,8 @@ class Magasin_refactor {
     private static final String PASS_VIP_CONCERT = "Pass VIP Concert";
     private static final String KRYPTONITE = "Kryptonite";
 
+    private static final String POUVOIRS_MAGIQUES = "Pouvoirs magiques";
+
     public Magasin_refactor(Item[] items) {
         this.items = items;
     }
@@ -16,6 +18,12 @@ class Magasin_refactor {
             // Valeur de decrementation standard
             int qualityDec = 1;
             int sellInDec = 1;
+
+            // Regle Les éléments "Pouvoirs magiques" voient leur qualité se dégrader de deux fois plus vite
+            // que les objets normaux.
+            if(i.name.equals(POUVOIRS_MAGIQUES)) {
+                qualityDec *= 2;
+            }
 
             // Regle date de péremption est passée, la qualité se dégrade deux fois plus rapidement.
             if (i.sellIn <= 0) {
