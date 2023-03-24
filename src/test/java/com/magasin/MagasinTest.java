@@ -27,11 +27,11 @@ class MagasinTest {
      */
     private void traitment(Magasin app, Magasin_refactor app_modif, int j) {
         afficherConsole(j,"initial ", app.items);
-        afficherConsole(j,"refactor  ", app_modif.items);
+        afficherConsole(j,"refactor", app_modif.items);
         app.updateQuality();
         app_modif.updateQuality();
-        afficherConsole(j,"initial", app.items);
-        afficherConsole(j,"refactor ", app_modif.items);
+        afficherConsole(j,"initial ", app.items);
+        afficherConsole(j,"refactor", app_modif.items);
     }
 
     /**
@@ -128,6 +128,9 @@ class MagasinTest {
         }
     }
 
+    /**
+     * Methode de test d'un magasin de PassVipConcert
+     */
     @Test
     void testPassVipConcert() {
 
@@ -172,8 +175,12 @@ class MagasinTest {
         }
     }
 
+
+    /**
+     * Methode de test d'un magasin de produits normaux
+     */
     @Test
-    void testPassJambon() {
+    void testPassNormaux() {
 
         // initialisation variables locales
         String product = "Jambon";
@@ -216,4 +223,85 @@ class MagasinTest {
             }
         }
     }
+
+
+    /**
+     * Methode de test d'un magasin de produits pouvoirs magiques
+     */
+    @Test
+    void testPassPouvoirsMagiques() {
+
+        // initialisation du magasin de produits normaux avec tous les cas
+        String product = "Produits Normaux ";
+        Item[] items = new Item[] {
+                new Item(product, 100, 50),
+                new Item(product, 100, 25),
+                new Item(product, 100, 5),
+                new Item(product, 50, 50),
+                new Item(product, 50, 25),
+                new Item(product, 50, 5),
+                new Item(product, 5, 50),
+                new Item(product, 5, 25),
+                new Item(product, 5, 5)      };
+
+        // initialisation des magasins initial / refactor
+        product = "Pouvoirs magiques";
+        Item[] items2 = new Item[] {
+                new Item(product, 100, 50),
+                new Item(product, 100, 25),
+                new Item(product, 100, 5),
+                new Item(product, 50, 50),
+                new Item(product, 50, 25),
+                new Item(product, 50, 5),
+                new Item(product, 5, 50),
+                new Item(product, 5, 25),
+                new Item(product, 5, 5)      };
+
+        // initialisation variables locales
+        int nombreIteration = 200;
+        int[] qualityNormauxInitial = new int[items.length];
+        int[] qualityNormauxModif = new int[items.length];
+        int[] qualityMagiquesInitial = new int[items.length];
+        int[] qualityMagiquesModif = new int[items.length];
+        Magasin_refactor app_normaux = new Magasin_refactor(items);
+        Magasin_refactor app_magiques = new Magasin_refactor(items2);
+
+        // boucle du nombre de traitement
+        for (int j=0; j<nombreIteration; j++) {
+
+            // quality des items du magasin avant traitement
+            for (int i=0; i<items.length; i++) {
+                qualityNormauxInitial[i] = items[i].quality;
+                qualityMagiquesInitial[i] = items2[i].quality;
+            }
+
+            // affichage des magasins avant traitement
+            afficherConsole(j,"normaux  : ", app_normaux.items);
+            afficherConsole(j,"magiques : ", app_magiques.items);
+
+            // traitement
+            app_normaux.updateQuality();
+            app_magiques.updateQuality();
+
+            // affichage des magasins apres traitement
+            afficherConsole(j,"normaux  : ", app_normaux.items);
+            afficherConsole(j,"magiques : ", app_magiques.items);
+
+            // quality des items du magasin avant traitement
+            for (int i=0; i<items.length; i++) {
+                qualityNormauxModif[i] = items[i].quality;
+                qualityMagiquesModif[i] = items2[i].quality;
+            }
+
+            // boucle de test sur tous les articles du magasin
+            // la difference de quality est 2x plus importantes sur les produits magiques
+            for (int i=0; i< app_normaux.items.length; i++) {
+                if (items2[i].quality != 0) {
+                    assertEquals((qualityNormauxModif[i] - qualityNormauxInitial[i]) * 2,
+                            (qualityMagiquesModif[i] - qualityMagiquesInitial[i]));
+                }
+            }
+        }
+    }
+
 }
